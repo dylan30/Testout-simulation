@@ -1,12 +1,20 @@
 package com.testout.qa.pages;
 
+import static org.testng.Assert.assertTrue;
+
+import java.util.List;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+
 
 import com.testout.qa.base.*;
 
@@ -19,10 +27,6 @@ public class SettingPage extends TestBase {
 	@FindBy(xpath = "//div[@id='siMailContactsCalendars.Grid.tbText']")
 	WebElement emailContacts;
 	
-//	@FindBy(xpath = "//div[@id='gClient.MailContactsCalendarsSettings1.ContentPresenter.HeaderedContentControl.Grid.svScrollViewer.Grid.Viewport.ScrollContentPresenter.OuterElement.InnerElement.Border.ContentPresenter.spStackPanel.PropertyGroup.Border.ContentPresenter.lbAccounts.Grid.Border.ScrollViewer.Grid.Viewport.ScrollContentPresenter.OuterElement.InnerElement.ItemsPresenter.StackPanel.SettingsItemSubMenu.Grid.ContentPresenter.StackPanel.TextBlock']")
-//	WebElement maggieBrown;
-	
-	
 	@FindBy(xpath = "//div[contains(text(), 'Maggie Brown')]")
 	WebElement maggieBrown;
 	
@@ -32,30 +36,44 @@ public class SettingPage extends TestBase {
 	@FindBy(xpath = "//div[contains(text(), 'Advanced')]")
 	WebElement advanced;	
 	
-	//@FindBy(xpath = "//div[@data-typename='HorizontalToggleSwitch']/div[@style='position: absolute; overflow: visible; display: inherit; cursor: pointer; left: 19px; top: 1px; width: 28px; height: 28px;']")	
-	//@FindBy(xpath = "//div[@id='gTablet.Grid.gClient.GMailSettings1.Grid.Border.ContentPresenter.hcHeaderedContentControl.Grid.svScrollViewer.Grid.Viewport.ScrollContentPresenter.OuterElement.InnerElement.Border.ContentPresenter.grdClient.spAdvanced.PropertyGroup2.Border.ContentPresenter.SettingsListBox.Grid.Border.ScrollViewer.Grid.Viewport.ScrollContentPresenter.OuterElement.InnerElement.ItemsPresenter.StackPanel.siUseSSL.Grid.tbOnOff' and @data-typename='HorizontalToggleSwitch']")
-	//@FindBy(xpath = "//div[@data-typename='HorizontalToggleSwitch']/div[@id='gTablet.Grid.gClient.GMailSettings1.Grid.Border.ContentPresenter.hcHeaderedContentControl.Grid.svScrollViewer.Grid.Viewport.ScrollContentPresenter.OuterElement.InnerElement.Border.ContentPresenter.grdClient.spAdvanced.PropertyGroup2.Border.ContentPresenter.SettingsListBox.Grid.Border.ScrollViewer.Grid.Viewport.ScrollContentPresenter.OuterElement.InnerElement.ItemsPresenter.StackPanel.siUseSSL.Grid.tbOnOff.Grid.SwitchRoot']/div[@id='gTablet.Grid.gClient.GMailSettings1.Grid.Border.ContentPresenter.hcHeaderedContentControl.Grid.svScrollViewer.Grid.Viewport.ScrollContentPresenter.OuterElement.InnerElement.Border.ContentPresenter.grdClient.spAdvanced.PropertyGroup2.Border.ContentPresenter.SettingsListBox.Grid.Border.ScrollViewer.Grid.Viewport.ScrollContentPresenter.OuterElement.InnerElement.ItemsPresenter.StackPanel.siUseSSL.Grid.tbOnOff.Grid.SwitchRoot.Canvas.SwitchTrack.StackPanel.Border1']")	
-	
-	//@FindBy(xpath = "//div[@style='position: absolute; overflow: visible; display: inherit; cursor: pointer; left: 34px; top: -1px; width: 36px; height: 31px; background-color: rgb(255, 255, 255); border-width: 0px; border-radius: 0px;']")
-	@FindBy(xpath = "//div[@data-typename='Thumb']")
+	@FindBy(xpath = "//div[@id='siUseSSL.Grid.tbOnOff']/div[@id='siUseSSL.Grid.tbOnOff.Grid.SwitchRoot']/div[@id='siUseSSL.Grid.tbOnOff.Grid.SwitchRoot.Canvas.SwitchThumb']")
 	WebElement sslEnabled;
 	
 	@FindBy(xpath = "//div[contains(text(), 'Server Port')]")
 	WebElement serverPort;
 	
-	@FindBy(xpath = "//input[@data-typename='TextBox' and @type='text']")	
-	//@FindBy(xpath = "//input[contains(text(), '993')]")
+	@FindBy(xpath = "//input[@id='tbServerPort']")	
 	WebElement serverPortText;
 	
-	@FindBy(xpath = "//div[@id='gHeader.gAdvanced.btnAccount.grid.contentPresenter.TextBlock']")
+	@FindBy(xpath = "//div[@id='btnAccount']/div[contains(text(), 'Account')]")
 	WebElement account;
 	
-	@FindBy(xpath = "//div[@id='gHeader.btnDone.grid.contentPresenter.TextBlock']")
+	@FindBy(xpath = "//div[@id='btnDone']/div[contains(text(), 'Done')]")
 	WebElement done;
 	
-	// Initializing the Page Objects:
+	@FindBy(xpath = "//div[@id='siWiFi']/div[contains(text(), 'Wi-Fi')]")
+	WebElement wifi;
+	
+	@FindBy(xpath = "//div[@data-typename='SettingsItemNetwork']/div[contains(text(), 'CorpNet')]")
+	WebElement corpNet;
+	
+	@FindBy(xpath = "//div[@id='tbPassword']/input[@id='psbx']")
+	WebElement passwordBox;
+	
+	@FindBy(xpath = "//div[@id='btnJoin']/div[contains(text(), 'Join')]")
+	WebElement join;
+	
+	@FindBy(xpath = "//div[@id='bDone']/div[contains(text(), 'Done')]")
+	WebElement buttonDone;
+	
+
 	public SettingPage() {
 		PageFactory.initElements(driver, this);
+	}
+	
+	public void waitOutElement(WebElement element) {
+		wait =new WebDriverWait(driver, 30);
+		wait.until(ExpectedConditions.elementToBeClickable(element));		
 	}
 	
 	
@@ -78,30 +96,22 @@ public class SettingPage extends TestBase {
 	public void advanced() {
 		
 		advanced.click();
+	}	
+
+	
+	public void sslEnabled() {		
+
+		waitOutElement(sslEnabled);
+		
+		Actions c = new Actions(driver);
+		c.moveToElement(sslEnabled).moveByOffset(18, 0).click().perform();
+
 	}
 	
-	public void sslEnabled() {
 		
-		//((JavascriptExecutor)driver).executeScript("arguments[0].checked = true;", sslEnabled);
-		
-		
-		wait =new WebDriverWait(driver, 30);
-		wait.until(ExpectedConditions.elementToBeClickable(sslEnabled));
-		sslEnabled.click();
-	}
-	
-	public void scrollDown() {
-		((JavascriptExecutor) driver).executeScript(
-	            "arguments[0].scrollIntoView();", serverPort);
-	}
-	
-	public void verifyPort993(String port) {
-		
-		if(serverPortText.isDisplayed()) {
-			System.out.println("here");
-		}
-		
-		String portText = serverPortText.getText();
+	public void verifyPort993(String port) {		
+
+		String portText = serverPortText.getAttribute("value");
 		Assert.assertEquals(portText, port);
 		
 	}
@@ -117,6 +127,36 @@ public class SettingPage extends TestBase {
 		done.click();
 	}
 	
+	public void wifi() {
+		
+		wifi.click();
+	}
 	
+	public void corpnet() {
+		
+		corpNet.click();
+	}
 	
+	public void inputPwd() {
+		
+		passwordBox.sendKeys("@CorpNetWeRSecure!&");
+	}
+	
+	public void join() {
+		
+		join.click();
+	}
+	
+	public void allDone() {
+		
+		buttonDone.click();
+	}
+	
+	public void verifyScore() {
+
+		driver.switchTo().frame("_ifrmreport_");
+		WebElement list = driver.findElement(By.xpath("//div[contains(text(), 'Your Score: 1 of 1 (100%)')]"));
+		Assert.assertTrue(list.getText().equals("Your Score: 1 of 1 (100%)"));
+		driver.switchTo().parentFrame();
+	}
 }

@@ -12,15 +12,12 @@ public class TestBase {
 	
 	public static WebDriver driver;
 	
-	
-//	public TestBase() {		
-//		
-//	}
+
 	
 	public static void invokeBrowser(){
 		
 		try {
-			System.setProperty("webdriver.chrome.driver", "D:\\selenium_project\\SimulationTest\\src\\test\\resources\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", "D:\\selenium_project\\Testout-simulation\\src\\test\\resources\\chromedriver.exe");
 			driver = new ChromeDriver();
 			
 			driver.manage().window().maximize();
@@ -39,7 +36,7 @@ public class TestBase {
 	public void clickSettingIcon() {
 		
 		driver.findElement(By.xpath("//div[@id='wpDesktop.DesktopIcon15.Grid.tbText']")).click();
-		//return settingpage;
+		
 	}
 	
 	
